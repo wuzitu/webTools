@@ -1,0 +1,102 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/spectre.css/0.5.9/spectre.min.css" rel="stylesheet" />
+    <!-- <script src="https://unpkg.com/petite-vue" defer init></script> -->
+    <title>博然工具箱</title>
+    <style>
+        body {
+            padding: 20px60px;
+        }
+
+        h1 {
+            border-bottom: 3pxsolid#ccc;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            margin: 10px auto;
+            padding: 10px;
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h4 style="margin: 0 auto;">博然工具箱</h4>
+
+        <div v-scope="MyComp()">
+        </div>
+
+    </div>
+    <div v-scope="{ a:'',b:'',c:'' }">
+    </div>
+    <template id="comp">
+        <!-- {{ count }} {{ plusOne }}
+      <button @click="count++">++</button> -->
+        <div class="form-group" style="padding: 0 10vw;">
+            <label class="form-label" for="input-example-1">1数字</label>
+            <input class="form-input" type="number" v-model="a" placeholder="a">
+            <label class="form-label" for="input-example-1">2数字</label>
+            <input class="form-input" type="number" v-model="b" placeholder="b">
+            <label class="form-label" for="input-example-1">3数字</label>
+            <input class="form-input" type="number" v-model="c" placeholder="c">
+        </div>
+
+        结果：
+        <h4> {{ result }} </h4>
+        <button class="btn btn-primary" @click="replaceForm">重置</button>
+        <p class="text-gray">最大值：{{ MaxArrp.toFixed(1) }} 最小值：{{MinArrp.toFixed(1)}} 均值：{{average.toFixed(1)}}</p>
+    </template>
+
+</body>
+<script type="module">
+    import { createApp } from "https://unpkg.com/petite-vue?module";
+
+    function MyComp() {
+        return {
+            $template: "#comp",
+            result: "",
+            a: "",
+            b: "",
+            c: "",
+            MaxArrp:"",
+            MinArrp:"",
+            average:"",
+            get result() {
+                let arr = [Number(this.a), Number(this.b), Number(this.c)];
+                this.MaxArrp = Math.max(...arr);
+                this.MinArrp = Math.min(...arr);
+                this.average = arr.reduce((num, item, index) => {
+                    if (index != arr.length - 1) {
+                        return num + item;
+                    } else {
+                        return (num + item) / arr.length;
+                    }
+                });
+                let res = (this.MaxArrp - this.MinArrp) / this.average;
+                if (window.isNaN(res) || !this.a || !this.b || !this.c) {
+                    res = "@(｡･o･)@"
+                }
+                return res
+            },
+            // methods
+            replaceForm() {
+                this.a = ""
+                this.b = ""
+                this.c = ""
+            }
+        };
+    }
+    createApp({
+        MyComp,
+    }).mount();
+</script>
+
+</html>
